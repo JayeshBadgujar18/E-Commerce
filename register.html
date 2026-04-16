@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - ShopEase</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <style>
+    .password-requirements {
+      font-size: 0.9rem;
+      color: #666;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">🛍️ ShopEase</div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="product-seo.html">Deals</a></li>
+        <li><a href="checkout.html">Checkout</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="register.html" class="active">Register</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div class="form-container">
+      <h2 style="text-align:center;margin-bottom:30px;">Create Account</h2>
+      
+      <div id="message"></div>
+      
+      <form id="registerForm" onsubmit="return false;">
+        <div class="form-group">
+          <input type="text" id="username" placeholder="Username" required>
+        </div>
+        
+        <div class="form-group">
+          <input type="email" id="email" placeholder="Email Address" required>
+        </div>
+        
+        <div class="form-group">
+          <input type="password" id="password" placeholder="Password" required>
+          <div class="password-requirements">
+            Password must be at least 8 characters
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+        </div>
+        
+        <!-- reCAPTCHA -->
+        <div class="form-group">
+          <div class="g-recaptcha" data-sitekey="YOUR_RECAPTCHA_SITE_KEY"></div>
+        </div>
+        
+        <button type="submit" class="btn" style="width:100%;">Register</button>
+      </form>
+      
+      <p style="text-align:center;margin-top:20px;">
+        Already have an account? <a href="login.html">Login here</a>
+      </p>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 ShopEase. All rights reserved. | Secure Payments | Free Shipping</p>
+  </footer>
+
+  <script>
+    document.getElementById('registerForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const username = document.getElementById('username').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const recaptchaResponse = grecaptcha.getResponse();
+      const messageDiv = document.getElementById('message');
+      
+      // Client-side validation
+      if (password !== confirmPassword) {
+        messageDiv.innerHTML = '<div class="error">Passwords do not match!</div>';
+        return;
+      }
+      
+      if (password.length < 8) {
+        messageDiv.innerHTML = '<div class="error">Password must be at least 8 characters!</div>';
+        return;
+      }
+      
+      if (!recaptchaResponse) {
+        messageDiv.innerHTML = '<div class="error">Please complete the CAPTCHA!</div>';
+        return;
+      }
+      
+      // Send to server
+      try {
+        const response = await fetch('register.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username,
+            email,
+            password,
+            recaptcha: recaptchaResponse
+          })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          messageDiv.innerHTML = '<div class="success">Registration successful! Redirecting to login...</div>';
+          setTimeout(() => {
+            window.location.href = 'login.html';
+          }, 2000);
+        } else {
+          messageDiv.innerHTML = `<div class="error">${result.message}</div>`;
+          grecaptcha.reset();
+        }
+      } catch (error) {
+        messageDiv.innerHTML = '<div class="error">An error occurred. Please try again.</div>';
+      }
+    });
+  </script>
+</body>
+</html>
