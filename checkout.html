@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - ShopEase</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .checkout-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-top: 30px;
+    }
+    .cart-summary {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 15px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .total {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 2px solid #ddd;
+    }
+    .payment-section {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    @media (max-width: 768px) {
+      .checkout-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <!-- PayPal SDK -->
+  <script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_SANDBOX_CLIENT_ID&currency=USD"></script>
+</head>
+<body>
+  <header>
+    <div class="logo">🛍️ ShopEase</div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="product-seo.html">Deals</a></li>
+        <li><a href="checkout.html" class="active">Checkout</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="register.html">Register</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h1>Checkout</h1>
+    
+    <div class="checkout-container">
+      <div class="cart-summary">
+        <h2>Order Summary</h2>
+        <div id="cartItems"></div>
+        <div class="total">
+          Total: $<span id="cartTotal">0.00</span>
+        </div>
+        <button class="btn" onclick="clearCart()" style="background:#e74c3c;margin-top:20px;">Clear Cart</button>
+      </div>
+      
+      <div class="payment-section">
+        <h2>Payment Method</h2>
+        <p style="margin-bottom:20px;">Pay securely with PayPal (Sandbox Mode)</p>
+        
+        <!-- PayPal Button Container -->
+        <div id="paypal-button-container"></div>
+        
+        <p style="margin-top:20px;font-size:0.9rem;color:#666;">
+          <strong>Test Card:</strong> Use PayPal Sandbox account<br>
+          This is a simulation - no real money will be charged.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 ShopEase. All rights reserved. | Secure Payments | Free Shipping</p>
+  </footer>
+
+  <script>
+    // Load cart from localStorage
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    
+    function displayCart() {
+      const cartItems = document.getElementById('cartItems');
+      const cartTotal = document.getElementById('cartTotal');
+      
+      if (cart.length === 0) {
+        cartItems.innerHTML = '<p style="text-align:center;padding:20px;">Your cart is empty</p>';
+        cartTotal.textContent = '0.00';
+        return 0;
+      }
+      
+      let total = 0;
+      cartItems.innerHTML = cart.map((item, index) => {
+        total += item.price * item.quantity;
+        return `
+          <div class="cart-item">
+            <span>${item.name} x${item.quantity}</span>
+            <span>$${(item.price * item.quantity).toFixed(2)}</span>
+          </div>
+        `;
+      }).join('');
+      
+      cartTotal.textContent = total.toFixed(2);
+      return total;
+    }
+    
+    function clearCart() {
+      if (confirm('Are you sure you want to clear your cart?')) {
+        localStorage.removeItem('cart');
+        cart = [];
+        displayCart();
+      }
+    }
+    
+    const totalAmount = displayCart();
+    
+    // PayPal Integration
+    paypal.Buttons({
+      createOrder: function(data, actions) {
+        const amount = displayCart();
+        if (amount <= 0) {
+          alert('Your cart is empty!');
+          return;
+        }
+        return actions.order.create({
+          purchase_units: [{
+            description: 'ShopEase Order',
+            amount: {
+              value: amount.toFixed(2)
+            }
+          }]
+        });
+      },
+      onApprove: function(data, actions) {
+        return actions.order.capture().then(function(details) {
+          alert(`Transaction completed by ${details.payer.name.given_name}!\nThank you for your purchase!`);
+          localStorage.removeItem('cart');
+          cart = [];
+          displayCart();
+        });
+      },
+      onError: function(err) {
+        console.error(err);
+        alert('An error occurred during the transaction. Please try again.');
+      },
+      onCancel: function(data) {
+        alert('Payment cancelled.');
+      }
+    }).render('#paypal-button-container');
+  </script>
+</body>
+</html>
