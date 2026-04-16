@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShopEase - Your One-Stop Shop</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="logo">🛍️ ShopEase</div>
+    <nav>
+      <ul>
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="product-seo.html">Deals</a></li>
+        <li><a href="checkout.html">Checkout</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="register.html">Register</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>Welcome to ShopEase</h1>
+    <p>Discover Amazing Products at Unbeatable Prices</p>
+    <button class="btn" onclick="location.href='products.html'">Shop Now →</button>
+  </section>
+
+  <div class="container">
+    <section class="categories">
+      <h2>Shop by Category</h2>
+      <div class="category-grid">
+        <div class="category-card" onclick="location.href='products.html?category=Electronics'">
+          <div style="font-size: 3rem;">📱</div>
+          <h3>Electronics</h3>
+          <p>Latest gadgets & devices</p>
+        </div>
+        <div class="category-card" onclick="location.href='products.html?category=Clothing'">
+          <div style="font-size: 3rem;">👕</div>
+          <h3>Clothing</h3>
+          <p>Trendy fashion wear</p>
+        </div>
+        <div class="category-card" onclick="location.href='products.html?category=Home'">
+          <div style="font-size: 3rem;">🏠</div>
+          <h3>Home & Living</h3>
+          <p>Decor & appliances</p>
+        </div>
+        <div class="category-card" onclick="location.href='products.html?category=Books'">
+          <div style="font-size: 3rem;">📚</div>
+          <h3>Books</h3>
+          <p>Bestsellers & more</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="featured-products">
+      <h2>Featured Products</h2>
+      <div class="product-grid">
+        <div class="product-card">
+          <div class="product-image">📱</div>
+          <h3>Smartphone X Pro</h3>
+          <p>Latest 5G, 108MP Camera</p>
+          <p class="price">$699</p>
+          <button class="btn" onclick="addToCart('Smartphone X Pro', 699)">Add to Cart</button>
+        </div>
+        <div class="product-card">
+          <div class="product-image">💻</div>
+          <h3>UltraBook Pro</h3>
+          <p>Intel i7, 16GB RAM, 512GB SSD</p>
+          <p class="price">$1,299</p>
+          <button class="btn" onclick="addToCart('UltraBook Pro', 1299)">Add to Cart</button>
+        </div>
+        <div class="product-card">
+          <div class="product-image">👕</div>
+          <h3>Classic T-Shirt</h3>
+          <p>100% Organic Cotton</p>
+          <p class="price">$24.99</p>
+          <button class="btn" onclick="addToCart('Classic T-Shirt', 24.99)">Add to Cart</button>
+        </div>
+        <div class="product-card">
+          <div class="product-image">🎧</div>
+          <h3>Wireless Headphones</h3>
+          <p>Noise Cancelling, 40h Battery</p>
+          <p class="price">$199</p>
+          <button class="btn" onclick="addToCart('Wireless Headphones', 199)">Add to Cart</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 ShopEase. All rights reserved. | Secure Payments | Free Shipping</p>
+  </footer>
+
+  <script>
+    function addToCart(name, price) {
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      cart.push({ name, price, quantity: 1 });
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert(`${name} added to cart!`);
+    }
+  </script>
+</body>
+</html>
