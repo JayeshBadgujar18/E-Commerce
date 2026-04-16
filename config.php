@@ -21,5 +21,5 @@ try {
 }
 
 // reCAPTCHA Secret Key
-define('RECAPTCHA_SECRET', 'YOUR_RECAPTCHA_SECRET_KEY');
+define('RECAPTCHA_SECRET', '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe');
 ?>
