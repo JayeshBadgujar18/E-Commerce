@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Your ShopEase dashboard - manage orders, profile, and wishlist.">
   <title>Dashboard - ShopEase</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <div class="logo">🛍️ ShopEase</div>
+    <div class="logo" onclick="location.href='index.html'">🛍️ ShopEase</div>
     <nav>
       <ul>
         <li><a href="index.html">Home</a></li>
@@ -16,32 +17,50 @@
         <li><a href="product-seo.html">Deals</a></li>
         <li><a href="checkout.html">Checkout</a></li>
         <li><a href="dashboard.html" class="active">Dashboard</a></li>
-        <li><a href="#" onclick="logout()">Logout</a></li>
+        <li><a href="#" id="nav-logout-btn" class="nav-logout">Logout</a></li>
       </ul>
     </nav>
   </header>
 
   <div class="container">
-    <div style="background:white;padding:30px;border-radius:12px;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
-      <h1>Welcome, <span id="username"></span>!</h1>
-      <p>This is your protected dashboard. You're successfully logged in.</p>
+    <div class="dashboard-welcome">
+      <h1>Welcome, <span id="username"></span>! 👋</h1>
+      <p style="color:#6b7280;">This is your personal dashboard. Manage your account and view stats.</p>
       
-      <div style="margin-top:30px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;">
-        <div style="padding:20px;background:#f8f9fa;border-radius:8px;">
+      <div class="user-meta">
+        <span>📧 <span id="user-email"></span></span>
+        <span>📅 Joined: <span id="member-since"></span></span>
+      </div>
+
+      <div class="dashboard-stats">
+        <div class="stat-card">
           <h3>📦 Orders</h3>
-          <p>View your order history</p>
-          <button class="btn">View Orders</button>
+          <p>Your total orders</p>
+          <div class="stat-value" id="order-count">0</div>
+          <button class="btn" style="margin-top:12px;font-size:0.85rem;padding:8px 16px;">View Orders</button>
         </div>
-        <div style="padding:20px;background:#f8f9fa;border-radius:8px;">
-          <h3>👤 Profile</h3>
-          <p>Manage your account settings</p>
-          <button class="btn">Edit Profile</button>
+        <div class="stat-card">
+          <h3>🛒 Cart Items</h3>
+          <p>Items in your cart</p>
+          <div class="stat-value" id="dash-cart-count">0</div>
+          <a href="checkout.html" class="btn" style="margin-top:12px;font-size:0.85rem;padding:8px 16px;text-decoration:none;display:inline-flex;">View Cart</a>
         </div>
-        <div style="padding:20px;background:#f8f9fa;border-radius:8px;">
+        <div class="stat-card">
+          <h3>💰 Cart Value</h3>
+          <p>Total cart value</p>
+          <div class="stat-value" id="total-spent">$0.00</div>
+          <a href="products.html" class="btn" style="margin-top:12px;font-size:0.85rem;padding:8px 16px;text-decoration:none;display:inline-flex;">Shop More</a>
+        </div>
+        <div class="stat-card">
           <h3>❤️ Wishlist</h3>
           <p>Items you've saved</p>
-          <button class="btn">View Wishlist</button>
+          <div class="stat-value">0</div>
+          <button class="btn" style="margin-top:12px;font-size:0.85rem;padding:8px 16px;">View Wishlist</button>
         </div>
+      </div>
+
+      <div style="margin-top:30px;">
+        <button id="dashboard-logout-btn" class="btn" style="background:linear-gradient(135deg, #ef4444, #dc2626);">Logout</button>
       </div>
     </div>
   </div>
@@ -50,24 +69,8 @@
     <p>&copy; 2026 ShopEase. All rights reserved. | Secure Payments | Free Shipping</p>
   </footer>
 
-  <script>
-    // Check if user is logged in
-    fetch('check_session.php')
-      .then(response => response.json())
-      .then(data => {
-        if (!data.loggedIn) {
-          window.location.href = 'login.html';
-        } else {
-          document.getElementById('username').textContent = data.username;
-        }
-      });
-    
-    function logout() {
-      fetch('logout.php')
-        .then(() => {
-          window.location.href = 'login.html';
-        });
-    }
-  </script>
+  <script src="js/auth.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/dashboard.js"></script>
 </body>
 </html>

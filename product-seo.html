@@ -24,94 +24,10 @@
   <meta name="twitter:description" content="Lightweight powerhouse with 4K display and Intel i7 processor.">
   
   <link rel="stylesheet" href="style.css">
-  <style>
-    .breadcrumb {
-      padding: 20px 0;
-      color: #666;
-    }
-    .breadcrumb a {
-      color: #667eea;
-      text-decoration: none;
-    }
-    .product-detail {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 5px 25px rgba(0,0,0,0.1);
-    }
-    .product-gallery {
-      text-align: center;
-    }
-    .main-image {
-      font-size: 15rem;
-      margin-bottom: 20px;
-    }
-    .product-info h1 {
-      color: #2c3e50;
-      margin-bottom: 10px;
-    }
-    .rating {
-      color: #f39c12;
-      margin: 10px 0;
-    }
-    .price-large {
-      font-size: 2.5rem;
-      color: #27ae60;
-      margin: 20px 0;
-    }
-    .specs {
-      margin: 20px 0;
-      padding: 20px;
-      background: #f8f9fa;
-      border-radius: 8px;
-    }
-    .specs li {
-      margin: 10px 0;
-    }
-    .newsletter {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-      padding: 30px;
-      border-radius: 12px;
-      margin-top: 40px;
-      text-align: center;
-    }
-    .newsletter-form {
-      display: flex;
-      gap: 10px;
-      max-width: 500px;
-      margin: 20px auto;
-    }
-    .newsletter-form input {
-      flex: 1;
-      padding: 12px;
-      border: none;
-      border-radius: 25px;
-      font-size: 16px;
-    }
-    .reviews {
-      margin-top: 40px;
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-    }
-    .review-card {
-      border-bottom: 1px solid #ddd;
-      padding: 20px 0;
-    }
-    @media (max-width: 768px) {
-      .product-detail {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
 </head>
 <body>
   <header>
-    <div class="logo">🛍️ ShopEase</div>
+    <div class="logo" onclick="location.href='index.html'">🛍️ ShopEase</div>
     <nav>
       <ul>
         <li><a href="index.html">Home</a></li>
@@ -135,16 +51,16 @@
     <div class="product-detail">
       <div class="product-gallery">
         <div class="main-image">💻</div>
-        <p style="color:#666;">*Premium aluminum finish - actual product may vary slightly</p>
+        <p style="color:#6b7280;font-size:0.9rem;">*Premium aluminum finish - actual product may vary slightly</p>
       </div>
       
       <div class="product-info">
         <h1>UltraBook Pro 15</h1>
         <div class="rating">★★★★★ (4.8/5) - 1,234 Reviews</div>
-        <p>The ultimate lightweight laptop for professionals who demand performance and portability.</p>
+        <p style="color:#6b7280;">The ultimate lightweight laptop for professionals who demand performance and portability.</p>
         
         <div class="price-large">$1,299.00</div>
-        <p style="color:#27ae60;">✓ Free Shipping | ✓ 2-Year Warranty | ✓ 30-Day Returns</p>
+        <p style="color:#10b981;font-weight:500;">✓ Free Shipping | ✓ 2-Year Warranty | ✓ 30-Day Returns</p>
         
         <div class="specs">
           <h3>Key Specifications</h3>
@@ -160,38 +76,43 @@
           </ul>
         </div>
         
-        <button class="btn" style="font-size:1.2rem;padding:15px 40px;" onclick="addToCart('UltraBook Pro 15', 1299)">Add to Cart</button>
-        <button class="btn" style="background:#2ecc71;margin-left:10px;" onclick="location.href='checkout.html'">Buy Now</button>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <button class="btn" style="font-size:1.1rem;padding:15px 32px;" onclick="addToCart('UltraBook Pro 15', 1299, '💻')">
+            <span class="btn-icon">🛒</span> Add to Cart
+          </button>
+          <button class="btn" style="background:linear-gradient(135deg, #10b981, #059669);" onclick="addToCart('UltraBook Pro 15', 1299, '💻'); location.href='checkout.html'">
+            Buy Now
+          </button>
+        </div>
       </div>
     </div>
 
     <div class="reviews">
-      <h2>Customer Reviews</h2>
+      <h2 style="text-align:left;font-size:1.4rem;">Customer Reviews</h2>
       <div class="review-card">
-        <strong>John D.</strong> ★★★★★ <br>
+        <strong>John D.</strong> <span style="color:#f59e0b;">★★★★★</span> <br>
         "Best laptop I've ever owned. Super fast and lightweight. Perfect for travel."
       </div>
       <div class="review-card">
-        <strong>Sarah M.</strong> ★★★★★ <br>
+        <strong>Sarah M.</strong> <span style="color:#f59e0b;">★★★★★</span> <br>
         "The 4K display is stunning. Battery life is impressive. Highly recommend!"
       </div>
       <div class="review-card">
-        <strong>Mike R.</strong> ★★★★☆ <br>
+        <strong>Mike R.</strong> <span style="color:#f59e0b;">★★★★☆</span> <br>
         "Great performance, wish it had more ports. Still, an excellent machine."
       </div>
     </div>
 
-    <!-- Mailchimp Newsletter Section -->
+    <!-- Newsletter Section -->
     <div class="newsletter">
       <h2>📧 Get Exclusive Deals & Updates</h2>
       <p>Subscribe to our newsletter and get 10% off your first order!</p>
       
-      <!-- Replace with your actual Mailchimp form action URL -->
-      <form class="newsletter-form" action="https://gmail.us4.list-manage.com/subscribe/post?u=f6cf48057d7d8f201376651df&id=d78df19367&f_id=00b215e3f0" method="post" target="_blank">
-        <input type="email" name="EMAIL" placeholder="Enter your email address" required>
-        <button type="submit" class="btn" style="background:#2ecc71;">Subscribe Now</button>
+      <form class="newsletter-form" id="newsletterForm">
+        <input type="email" id="newsletterEmail" placeholder="Enter your email address" required>
+        <button type="submit" class="btn" style="background:linear-gradient(135deg, #10b981, #059669);">Subscribe Now</button>
       </form>
-      <p style="font-size:0.9rem;margin-top:10px;">We respect your privacy. Unsubscribe at any time.</p>
+      <p style="font-size:0.85rem;margin-top:10px;opacity:0.8;">We respect your privacy. Unsubscribe at any time.</p>
     </div>
   </div>
 
@@ -199,13 +120,24 @@
     <p>&copy; 2026 ShopEase. All rights reserved. | Secure Payments | Free Shipping</p>
   </footer>
 
+  <script src="js/auth.js"></script>
+  <script src="js/cart.js"></script>
   <script>
-    function addToCart(name, price) {
-      let cart = JSON.parse(localStorage.getItem('cart')) || [];
-      cart.push({ name, price, quantity: 1 });
-      localStorage.setItem('cart', JSON.stringify(cart));
-      alert(`${name} added to cart!`);
-    }
+    // Newsletter form handler
+    document.getElementById('newsletterForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('newsletterEmail').value;
+      // Store subscription locally
+      let subs = JSON.parse(localStorage.getItem('shopease_newsletter')) || [];
+      if (subs.includes(email)) {
+        Cart.showNotification('You are already subscribed!');
+      } else {
+        subs.push(email);
+        localStorage.setItem('shopease_newsletter', JSON.stringify(subs));
+        Cart.showNotification('Subscribed successfully! 🎉');
+        document.getElementById('newsletterEmail').value = '';
+      }
+    });
   </script>
 </body>
 </html>

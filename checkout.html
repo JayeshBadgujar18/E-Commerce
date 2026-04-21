@@ -3,52 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Complete your ShopEase order. Review your cart and checkout securely.">
   <title>Checkout - ShopEase</title>
   <link rel="stylesheet" href="style.css">
-  <style>
-    .checkout-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 30px;
-      margin-top: 30px;
-    }
-    .cart-summary {
-      background: white;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-    .cart-item {
-      display: flex;
-      justify-content: space-between;
-      padding: 15px 0;
-      border-bottom: 1px solid #eee;
-    }
-    .total {
-      font-size: 1.5rem;
-      font-weight: bold;
-      margin-top: 20px;
-      padding-top: 20px;
-      border-top: 2px solid #ddd;
-    }
-    .payment-section {
-      background: white;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-    @media (max-width: 768px) {
-      .checkout-container {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
-  <!-- PayPal SDK -->
-  <script src="https://www.paypal.com/sdk/js?client-id=Aa00e5LjmuI_m_hjpnlACfnJRetfQapzJmzUVzhYZ6CroywVAkOqhyL192NoNVNFLE8u42XTn-MxPMvD&currency=USD"></script>
 </head>
 <body>
   <header>
-    <div class="logo">🛍️ ShopEase</div>
+    <div class="logo" onclick="location.href='index.html'">🛍️ ShopEase</div>
     <nav>
       <ul>
         <li><a href="index.html">Home</a></li>
@@ -66,25 +27,35 @@
     
     <div class="checkout-container">
       <div class="cart-summary">
-        <h2>Order Summary</h2>
+        <h2 style="text-align:left;font-size:1.4rem;">Order Summary</h2>
         <div id="cartItems"></div>
         <div class="total">
           Total: $<span id="cartTotal">0.00</span>
         </div>
-        <button class="btn" onclick="clearCart()" style="background:#e74c3c;margin-top:20px;">Clear Cart</button>
+        <div style="display:flex;gap:12px;margin-top:20px;flex-wrap:wrap;">
+          <button class="btn" onclick="clearCart()" style="background:linear-gradient(135deg, #ef4444, #dc2626);">Clear Cart</button>
+          <a href="products.html" class="btn" style="background:rgba(99,102,241,0.1);color:#6366f1;text-decoration:none;">+ Add More</a>
+        </div>
       </div>
       
       <div class="payment-section">
-        <h2>Payment Method</h2>
-        <p style="margin-bottom:20px;">Pay securely with PayPal (Sandbox Mode)</p>
+        <h2 style="text-align:left;font-size:1.4rem;">Payment</h2>
+        <p style="margin-bottom:20px;color:#6b7280;">Review your cart and place your order.</p>
         
-        <!-- PayPal Button Container -->
-        <div id="paypal-button-container"></div>
+        <div style="background:#f9fafb;padding:20px;border-radius:12px;margin-bottom:20px;border:1px solid #e5e7eb;">
+          <p style="font-weight:600;color:#374151;margin-bottom:8px;">💳 Secure Checkout</p>
+          <p style="color:#6b7280;font-size:0.9rem;">Your payment information is safe. This is a demo store — no real charges will be made.</p>
+        </div>
+
+        <button id="checkout-btn" class="btn" style="width:100%;justify-content:center;padding:16px;font-size:1.1rem;">
+          🛒 Place Order
+        </button>
         
-        <p style="margin-top:20px;font-size:0.9rem;color:#666;">
-          <strong>Test Card:</strong> Use PayPal Sandbox account<br>
-          This is a simulation - no real money will be charged.
-        </p>
+        <div style="margin-top:16px;display:flex;gap:16px;justify-content:center;color:#9ca3af;font-size:0.85rem;">
+          <span>🔒 SSL Secured</span>
+          <span>📦 Free Shipping</span>
+          <span>↩️ Easy Returns</span>
+        </div>
       </div>
     </div>
   </div>
@@ -93,78 +64,8 @@
     <p>&copy; 2026 ShopEase. All rights reserved. | Secure Payments | Free Shipping</p>
   </footer>
 
-  <script>
-    // Load cart from localStorage
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    
-    function displayCart() {
-      const cartItems = document.getElementById('cartItems');
-      const cartTotal = document.getElementById('cartTotal');
-      
-      if (cart.length === 0) {
-        cartItems.innerHTML = '<p style="text-align:center;padding:20px;">Your cart is empty</p>';
-        cartTotal.textContent = '0.00';
-        return 0;
-      }
-      
-      let total = 0;
-      cartItems.innerHTML = cart.map((item, index) => {
-        total += item.price * item.quantity;
-        return `
-          <div class="cart-item">
-            <span>${item.name} x${item.quantity}</span>
-            <span>$${(item.price * item.quantity).toFixed(2)}</span>
-          </div>
-        `;
-      }).join('');
-      
-      cartTotal.textContent = total.toFixed(2);
-      return total;
-    }
-    
-    function clearCart() {
-      if (confirm('Are you sure you want to clear your cart?')) {
-        localStorage.removeItem('cart');
-        cart = [];
-        displayCart();
-      }
-    }
-    
-    const totalAmount = displayCart();
-    
-    // PayPal Integration
-    paypal.Buttons({
-      createOrder: function(data, actions) {
-        const amount = displayCart();
-        if (amount <= 0) {
-          alert('Your cart is empty!');
-          return;
-        }
-        return actions.order.create({
-          purchase_units: [{
-            description: 'ShopEase Order',
-            amount: {
-              value: amount.toFixed(2)
-            }
-          }]
-        });
-      },
-      onApprove: function(data, actions) {
-        return actions.order.capture().then(function(details) {
-          alert(`Transaction completed by ${details.payer.name.given_name}!\nThank you for your purchase!`);
-          localStorage.removeItem('cart');
-          cart = [];
-          displayCart();
-        });
-      },
-      onError: function(err) {
-        console.error(err);
-        alert('An error occurred during the transaction. Please try again.');
-      },
-      onCancel: function(data) {
-        alert('Payment cancelled.');
-      }
-    }).render('#paypal-button-container');
-  </script>
+  <script src="js/auth.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/checkout.js"></script>
 </body>
 </html>

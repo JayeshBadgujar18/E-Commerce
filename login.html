@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Login to your ShopEase account to access your dashboard, orders, and wishlist.">
   <title>Login - ShopEase</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <div class="logo">🛍️ ShopEase</div>
+    <div class="logo" onclick="location.href='index.html'">🛍️ ShopEase</div>
     <nav>
       <ul>
         <li><a href="index.html">Home</a></li>
@@ -27,20 +28,22 @@
       
       <div id="message"></div>
       
-      <form id="loginForm" onsubmit="return false;">
+      <form id="loginForm">
         <div class="form-group">
-          <input type="text" id="username" placeholder="Username or Email" required>
+          <label for="username">Username or Email</label>
+          <input type="text" id="username" placeholder="Enter username or email" required>
         </div>
         
         <div class="form-group">
-          <input type="password" id="password" placeholder="Password" required>
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Enter your password" required>
         </div>
         
-        <button type="submit" class="btn" style="width:100%;">Login</button>
+        <button type="submit" class="btn" style="width:100%;justify-content:center;padding:14px;">Login</button>
       </form>
       
-      <p style="text-align:center;margin-top:20px;">
-        Don't have an account? <a href="register.html">Register here</a>
+      <p style="text-align:center;margin-top:20px;color:#6b7280;">
+        Don't have an account? <a href="register.html" style="color:#6366f1;text-decoration:none;font-weight:600;">Register here</a>
       </p>
     </div>
   </div>
@@ -49,35 +52,30 @@
     <p>&copy; 2026 ShopEase. All rights reserved. | Secure Payments | Free Shipping</p>
   </footer>
 
+  <script src="js/auth.js"></script>
+  <script src="js/cart.js"></script>
   <script>
-    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    // Redirect if already logged in
+    if (Auth.isLoggedIn()) {
+      window.location.href = 'dashboard.html';
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
       e.preventDefault();
       
       const username = document.getElementById('username').value;
       const password = document.getElementById('password').value;
       const messageDiv = document.getElementById('message');
       
-      try {
-        const response = await fetch('login.php', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ username, password })
-        });
-        
-        const result = await response.json();
-        
-        if (result.success) {
-          messageDiv.innerHTML = '<div class="success">Login successful! Redirecting...</div>';
-          setTimeout(() => {
-            window.location.href = 'dashboard.html';
-          }, 1000);
-        } else {
-          messageDiv.innerHTML = `<div class="error">${result.message}</div>`;
-        }
-      } catch (error) {
-        messageDiv.innerHTML = '<div class="error">An error occurred. Please try again.</div>';
+      const result = Auth.login(username, password);
+      
+      if (result.success) {
+        messageDiv.innerHTML = '<div class="success">✓ Login successful! Redirecting...</div>';
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 1000);
+      } else {
+        messageDiv.innerHTML = `<div class="error">✕ ${result.message}</div>`;
       }
     });
   </script>
